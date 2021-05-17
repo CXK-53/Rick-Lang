@@ -340,6 +340,16 @@ class Interpreter(Keywords):
             if words[i] == KW_MAIN: is_main = True
             if words[i] == KW_END: is_main = False
 
+class ExpressionValue:
+    def __init__(self, exp):
+        self.exp = exp
+        
+    def tokenize(self):
+        """
+        a + b + 10 * 10
+        """
+        for i in range(len(self.exp.keys())):
+            pass
 
 
 #############################################################################
