@@ -1,9 +1,3 @@
-# Announcement
-- This language is in its testing period, we will probably change some keywords.
-- We don't usually update [The Chinese Documentation / 中文文档](https://github.com/Rick-Lang/rickroll-lang/blob/main/doc-Ch.md)
-- I will not update this repository recently because my class is started
-- We are currently working on the new Lexer...
-
 <img src="img/ico1.jpg" align="right" width="160" height="160"/>
 
 # Rick Roll Programming Language
@@ -17,41 +11,20 @@ Rick Roll Programming Language, a language for rickrolling!
 
 ![](https://repository-images.githubusercontent.com/367934588/4a27ae00-b73b-11eb-801b-36dd1756dc93)
 
-## Run Code
-Execute by converting .rickroll to Python
-```
-python3 RickRoll.py -py [Source Code File Name]
-```
-Execute by converting .rickroll to C++ (Requires g++ compiler)
-```
-python3 RickRoll.py -cpp [Source Code File Name]
-```
-Execute by interpreter (however this feature has a bunch of bugs)
-```
-python3 RickRoll.py -intpr [Source Code File Name]
-```
-If you want to know the execution time:
-> Add "--time"
-```
-python3 RickRoll.py -py [Source Code File Name] --time
-```
-Generate and play an audio from .rickroll
-```
-python3 RickRoll.py -py [Source Code File Name] --audio
-```
 
 ## Hello World
-**The syntax of RickRoll-Lang is not completely similar to Python**
+**Although RickRoll can be transpiled into Python3, its syntax is not completely similar to Python's**
 1. It doesn't need indentation
 2. The code must be written inside the main method, otherwise the interpreter will not execute
-3. **The keywords can be separated freely**
+3. Every identifier (function or variable name) should contain more than one character
+4. **The keywords can be separated freely**
 
 Rick Roll-Lang:
 ```
-take me to ur heart                                                    # This is the MAIN METHOD
-    give msg up "Never gonna give you up, never gonna let you down~\n" # Define a variable
-    i just wanna tell u how im feeling msg                             # print the "msg" variable
-say goodbye                                                            # End the main method
+take me to ur heart
+    give msg up "Never gonna give you up, never gonna let you down~\n"
+    i just wanna tell u how im feeling msg
+say goodbye
 ```
 Equivalent to Python
 ```python
@@ -70,10 +43,12 @@ int main(int argc, char* argv[]){
     cout<<msg;
 }
 ```
-
 **And you can get the output on your terminal:**
-![](https://preview.redd.it/w2n81iqx37p51.gif?format=png8&s=a5619fa00938c2aa817496ddd9eceda8a727324c)
+
+<src src=" https://camo.githubusercontent.com/e1e1abc53d498866b9a533d65cdfee7ac7cc289423dcbe3eead940051d93a275/68747470733a2f2f707265766965772e726564642e69742f77326e383169717833377035312e6769663f666f726d61743d706e673826733d61353631396661303039333863326161383137343936646464396563656461386137323733323463" width="460" height="460"/>
+
 <br>
+
 **Sorry, it's this:**
 ```
 Never gonna give you up, never gonna let you down~
@@ -85,13 +60,37 @@ takemetourheart
     i justwanna telluhowim feeling msg
 say good bye
 ```
-This can also be executable
+This is also executable
 
+
+## Run Code
+Execute by converting .rickroll to Python
+```shell
+python3 RickRoll.py [Source Code File Name]
+```
+Execute by converting .rickroll to C++ (Requires g++ compiler and has numerous bugs)
+```shell
+python3 RickRoll.py -cpp [Source Code File Name]
+```
+Execute by interpreter
+```shell
+python3 RickRoll.py -intpr [Source Code File Name]
+```
+If you want to know the execution time:
+> Add "--time"
+```shell
+python3 RickRoll.py [Source Code File Name] --time
+```
+Generate and play an audio from .rickroll
+```shell
+python3 RickRoll.py [Source Code File Name] --audio
+```
 
 ## Features
 - *[Turing-complete](https://en.wikipedia.org/wiki/Turing_completeness)*
 - *Support [Python 3.6+](https://www.python.org/downloads/release/python-3610/)*
 - *Keywords/statements are all comming from [Rick Astley's](https://en.wikipedia.org/wiki/Rick_Astley) lyrics*
+- *Keywords can be separated freely*
 - *[Examples](https://github.com/Rick-Lang/rickroll-lang/tree/main/examples) to get started*
 - *Translate RickRoll source code to Python3 and C++*
 - *[Generate and play audios from .rickroll source code](https://github.com/Rick-Lang/rickroll-lang#Generate-Audio)*
@@ -113,6 +112,8 @@ This generates an audio from the .rickroll program and plays it in your terminal
 - G++ compiler (For translating RickRoll to C++)
 
 ## Documentation
+We don't usually update [The Chinese Documentation / 中文文档](https://github.com/Rick-Lang/rickroll-lang/blob/main/doc-Ch.md)
+
 **[English](https://github.com/Rick-Lang/rickroll-lang/blob/main/doc.md)**
 <br>
 **[简体中文](https://github.com/Rick-Lang/rickroll-lang/blob/main/doc-Ch.md)**
@@ -121,20 +122,43 @@ This generates an audio from the .rickroll program and plays it in your terminal
 # Todo!
 In order to make RICK ROll becoming a world heritage, YOU and I still have a bunch of things to do!
 1. Add more keywords and built-in functions!
-2. Build a virtual machine or interpreter for RickRoll-Lang
-3. Write algorithms in RickRoll-Lang and upload them to [examples folder](examples).
-4. Make syntax highlights for [VS Code](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide) and [Sublime](https://www.sublimetext.com/docs/syntax.html)!
-5. Improve the current audio generator!
+2. Write algorithms in RickRoll-Lang and upload them to [examples folder](examples).
+3. Make syntax highlights for [VS Code](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide) and [Sublime](https://www.sublimetext.com/docs/syntax.html)!
+4. Improve the current audio generator!
+5. Improve the RickRoll interpreter!
 6. Support "writing code by singing"!
 7. Design a better icon!
 8. [**SPREAD RICK ROLL EVERYWHERE!!!**](https://www.bilibili.com/video/BV1uT4y1P7CX)
 
 # Rick Roll Language Website
 **[https://rickroll-lang.tech/introduction/](https://www.bilibili.com/video/BV1uT4y1P7CX)**
+<br>
+**_or_**
+<br>
+**https://rick-lang.github.io/rickroll-lang/**
+
+# Offcial Discord Server/Support
+https://discord.gg/yzZ3MfGZ8A
+Join this server to chat with cool people or for support
+<br /> We currently need some people to join! 
+
+# Credit: Rick Astley 
+ Youtube: https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw
+<br /> Twitter: https://twitter.com/rickastley
+<br /> Facebook: https://www.facebook.com/RickAstley
 
 
 # Contributors
-- _**[Sherlockcxk](https://github.com/Sherlockcxk)**_   (Writing code)
-- _**[StepfenShawn](https://github.com/StepfenShawn)**_  (Revised typos in source code && fixed bugs)
+- _**[SatinWuker](https://github.com/SatinWuker)**_   (Writing code)
+- _**[StepfenShawn](https://github.com/StepfenShawn)**_  (Revising typos in source code && fixing bugs)
 - _**[Lemonix-xxx](https://github.com/Lemonix-xxx)**_   (Making suggestions / advice)
-- _**[henriqueritter](https://github.com/henriqueritter)**_   (Contributed to RickRoll example)
+- _**[henriqueritter](https://github.com/henriqueritter)**_   (Contributed to Rickroll examples)
+- _**[Valcan3344](https://github.com/Valcan3344)**_   (Managing the Rickroll discord server)
+- _**[Tantatorn-dev](https://github.com/Tantatorn-dev)**_  (Contributed to Rickroll examples)
+- _**[calebrwalk5](https://github.com/calebrwalk5)**_  (Contributed to Rickroll examples)
+
+# Contact
+Wechat/微信: githubsherlockcxk
+<br>
+Discord: Satin Wuker#0572
+<br /> Valcan#1407

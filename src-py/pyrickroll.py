@@ -1,6 +1,5 @@
 from PublicVariables import *
-from Lexer import Lexer
-
+from Lexer import lexicalize
 
 # Token types
 TT_keyword  = 'KEYWORDS'
@@ -11,7 +10,6 @@ TT_string   = 'VALUE-STRING'
 TT_list     = 'VALUE-LIST'
 
 TT_arguments = 'ARGUMENTS'
-TT_operator = 'OPERATOR'
 TT_variable = 'VARIABLE'
 TT_function = 'FUNCTION'
 TT_library  = 'LIBRARY'
@@ -19,7 +17,7 @@ TT_build_in_funcs = 'BUILD-IN-FUNCS'
 
 
 # Keywords can execute outside main function
-kw_exe_outside_main = {KW_main, KW_def1, KW_import1}
+kw_exe_outside_main = {KW_main, KW_def, KW_import1}
 
 variables = []
 functions = []
@@ -40,7 +38,7 @@ libraries = {}
 def v_types(string):
     string = str(string)
     # Boolean
-    if string == 'True' or string == 'False':
+    if string in {'True', 'False'}:
         return 'bool'
     # String
     if string[0] == '"' and string[-1] == '"':
@@ -49,10 +47,7 @@ def v_types(string):
     if string[0] == '[' and string[-1] == ']':
         return 'list'
     # Determine the string is int or float
-    count = 0
-    for char in string:
-        if char in digits:
-            count += 1
+    count = sum(char in digits for char in string)
     if count == len(string) and string.count('.') < 2:
         return 'number'
 
@@ -63,10 +58,9 @@ class Token:    # Return token types
     def __init__(self, tokens):
         self.t_types = []
         self.t_values = []
-        self.__tokens = tokens
         self.last_kw = ''
 
-        for tok in self.__tokens:
+        for tok in tokens:
             if tok:
                 self.__make_token(tok)
 
@@ -78,8 +72,16 @@ class Token:    # Return token types
         global variables, functions
 
         if tok in keywords:
-            self.add_to_tokens(TT_keyword, tok)
+            if tok == 'is': self.add_to_tokens(TT_operator, '==')
+            elif tok == 'isnot': self.add_to_tokens(TT_operator, '!=')
+            elif tok == 'isgreaterthan': self.add_to_tokens(TT_operator, '>')
+            elif tok == 'islessthan': self.add_to_tokens(TT_operator, '<')
+            elif tok == 'isgreaterthanorequalto': self.add_to_tokens(TT_operator, '>=')
+            elif tok == 'islessthanorequalto': self.add_to_tokens(TT_operator, '<=')
+            else: self.add_to_tokens(TT_keyword, tok)
+
             self.last_kw = tok
+
         elif tok in OP_build_in_functions:
             if tok == 'length': self.add_to_tokens(TT_build_in_funcs, 'len')
             if tok == 'to_string': self.add_to_tokens(TT_build_in_funcs, 'str')
@@ -97,19 +99,15 @@ class Token:    # Return token types
             self.add_to_tokens(TT_number, tok)
 
         # Operators
-        elif tok in OP_arithmetic or tok in OP_relational or tok in OP_assignment or tok in OP_other:
-            if tok == 'is': self.add_to_tokens(TT_operator, '==')
-            elif tok == 'is_not': self.add_to_tokens(TT_operator, '!=')
-            elif tok == 'is_greater_than': self.add_to_tokens(TT_operator, '>')
-            elif tok == 'is_less_than': self.add_to_tokens(TT_operator, '<')
-            else: self.add_to_tokens(TT_operator, tok)
+        elif tok in operators:
+            self.add_to_tokens(TT_operator, tok)
 
         # Variables
         elif self.last_kw == KW_let:
             variables.append(tok)
             self.add_to_tokens(TT_variable, tok)
         # Functions
-        elif self.last_kw == KW_def1:
+        elif self.last_kw == KW_def:
             functions.append(tok)
             self.add_to_tokens(TT_function, tok)
         elif tok and tok in variables:
@@ -117,8 +115,6 @@ class Token:    # Return token types
 
         else:
             self.add_to_tokens(TT_arguments, tok)
-            # error(f'Exception in line {current_line}: the token [{tok}] is invalid...\n')
-
 
 
 ####################################################################################
@@ -127,13 +123,15 @@ class Token:    # Return token types
 
 class TranslateToPython:
 
-    def __init__(self, types, values):
-
+    def __init__(self):
         # types of the tokens
-        self.types = types
+        self.types = []
         # tokens
-        self.values = values
+        self.values = []
 
+    def translate(self, types, values):
+        self.types = types
+        self.values = values
         # if there is code in the current line of code
         if self.types:
 
@@ -143,15 +141,14 @@ class TranslateToPython:
                     self.convert(kw=self.values[0])
 
                 else:
-                    error(f'Exception in line {current_line}: [{self.values[0]}] can not be executed outside the main method\n')
+                    stdout.write(f'Exception in line {current_line}: [{self.values[0]}] can not be executed outside the main method\n')
 
             else:
-                error(f'Exception in line {current_line}: [{self.values[0]}] is neither a keyword nor function\n')
+                stdout.write(f'Exception in line {current_line}: [{self.values[0]}] is neither a keyword nor function\n')
 
         # if this line doesn't have code, then write "\n"
         else:
             self.write("")
-
 
     def convert(self, kw):
         global indent_count, is_main, is_function
@@ -159,17 +156,17 @@ class TranslateToPython:
         if kw in functions:
             self.write(join_list(self.values))
 
-        if kw == KW_main:
+        elif kw == KW_main:
             self.write('if __name__ == "__main__":')
 
             is_main = True
             indent_count += 1
 
-        if indent_count == 0:
+        elif indent_count == 0:
             if is_main: is_main = False
             if is_function: is_function = False
 
-        if kw == KW_print:
+        elif kw == KW_print:
             """
                 print EXPR
             """
@@ -177,16 +174,16 @@ class TranslateToPython:
             EXPR = join_list(self.values[1:])
             self.write(f'print({EXPR}, end="")')
 
-        if kw == KW_let:
+        elif kw == KW_let:
             """
                 let ID up EXPR
             """
 
-            ID = self.values[1]
-            EXPR = join_list(self.values[3:])
+            ID = join_list(self.values[self.values.index(KW_let) + 1 : self.values.index(KW_assign)])
+            EXPR = join_list(self.values[self.values.index(KW_assign) + 1:])
             self.write(f'{ID} = {EXPR}')
 
-        if kw == KW_if:
+        elif kw == KW_if:
             """
                 if CONDI
             """
@@ -195,11 +192,19 @@ class TranslateToPython:
             self.write(f'if {CONDI}:')
             indent_count += 1
 
-        if kw == KW_endless_loop:
+        elif kw == KW_try:
+            self.write('try:')
+            indent_count += 1
+
+        elif kw == KW_except:
+            self.write('except:')
+            indent_count += 1
+
+        elif kw == KW_endless_loop:
             self.write('while True:')
             indent_count += 1
 
-        if kw == KW_while_loop:
+        elif kw == KW_while_loop:
             """
                 while1 CONDI while2
             """
@@ -208,32 +213,32 @@ class TranslateToPython:
             self.write(f'while {CONDI}:')
             indent_count += 1
 
-        if kw == KW_break:
+        elif kw == KW_break:
             self.write('break')
 
-        if kw == KW_continue:
+        elif kw == KW_continue:
             self.write('continue')
 
-        if kw == KW_def1:
+        elif kw == KW_def:
             """
                 def1 ID ARGS def2
             """
             ID = self.values[1]
-            ARGS = join_list(self.values[2 :-1])
+            ARGS = join_list(self.values[2:])
 
             self.write(f'def {ID}({ARGS}):')
 
             is_function = True
             indent_count += 1
 
-        if kw == KW_return1:
+        elif kw == KW_return1:
             """
                 return1 EXPR return2
             """
             EXPR = join_list(self.values[1: -1])
             self.write(f'return {EXPR}')
 
-        if kw == KW_end:
+        elif kw == KW_end:
             self.write('pass')
             indent_count -= 1
 
@@ -246,6 +251,8 @@ class TranslateToPython:
 def run_in_py(src_file_name):
     global current_line
 
+    transpiler = TranslateToPython()
+
     with open(src_file_name, mode='r', encoding='utf-8') as src:
 
         content = src.readlines()
@@ -254,8 +261,7 @@ def run_in_py(src_file_name):
         for statement in content:  # "statement" is a line of code the in source code
             current_line += 1
 
-            lexer = Lexer(statement)
-            token = Token(lexer.tokens)
-            TranslateToPython(types=token.t_types, values=token.t_values)
+            token = Token(lexicalize(statement))
+            transpiler.translate(types=token.t_types, values=token.t_values)
 
     return py_code

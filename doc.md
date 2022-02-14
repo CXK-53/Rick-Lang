@@ -5,6 +5,7 @@ A rick roll oriented, dynamic, strong, interpreting esoteric programming languag
 **The syntax of RickRoll-Lang is not same as Python**
 1. It doesn't need indentation
 2. The code must be written inside the main method, otherwise the interpreter will not execute
+3. Every identifier (function or variable name) should contain more than one character
 
 ## Commands to execute your code
 Execute by converting .rickroll to Python
@@ -92,7 +93,7 @@ While loop
 ```
 take me to ur heart
     give a up 10
-    together forever with a is_less_than 10
+    together forever with a is less than 10
         give a up a + 1
     say goodbye
 
@@ -110,12 +111,12 @@ if __name__ == "__main__":
 ## Defining Function
 RickRoll supports return function
 ```
-never_knew func arg1, arg2 could_feel_this_way  # Define a function
-    when_i_give_my arg1, arg2 it_will_be_completely # Return arg1 and arg2
-say_good_bye
+gonna do_something arg1, arg2 # Define a function
+    when i give my arg1, arg2 it will be completely # Return arg1 and arg2
+say goodbye
 ```
 Equivalent to Python:
 ```python
-def func(arg1, arg2):
+def do_something(arg1, arg2):
     return arg1, arg2
 ```
