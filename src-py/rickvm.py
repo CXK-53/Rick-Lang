@@ -14,7 +14,9 @@ def precedence(op):
     return 0
 
 def applyOp(a, b, op): ##a and b can be either ints or strs due to the eval function, op is the string of the operator.
-    return str(eval(f"{a}{op}{b}")) ##Your initial version returned True/False as a string, so i did the same. If you want to remove this then remove the str() function.
+    answ = eval(f"{a}{op}{b}")
+    if isinstance(answ, bool) == True: return str(answ) ##Since your initial version returned the str of the boolean responses.
+    return answ
 
 def evaluate(tokens):
     if len(tokens) == 1:
